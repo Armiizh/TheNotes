@@ -33,11 +33,9 @@ import com.example.notesappmvvm.navigation.NavRoute
 import com.example.notesappmvvm.ui.theme.NotesAppMVVMTheme
 
 @Composable
-fun MainScreen(navController: NavHostController) {
+fun MainScreen(navController: NavHostController, viewModel: MainViewModel) {
 
-    val context = LocalContext.current
-    val mViewModel: MainViewModel =
-        viewModel(factory = MainViewModelFactory(context.applicationContext as Application))
+    val notes = viewModel.readAllNotes().observeAsState(listOf()).value
 
     Scaffold(
         floatingActionButton = {
@@ -56,6 +54,9 @@ fun MainScreen(navController: NavHostController) {
                 modifier = Modifier
                     .padding(PaddingValues(vertical = 8.dp, horizontal = 12.dp))
             ) {
+                items(notes) { note ->
+                    NoteItem(note = note, navController = navController)
+                }
             }
         }
     )
@@ -92,6 +93,10 @@ fun NoteItem(
 @Composable
 fun PrevMainScreen() {
     NotesAppMVVMTheme {
-        MainScreen(navController = rememberNavController())
+        val context = LocalContext.current
+        val mViewModel: MainViewModel =
+            viewModel(factory = MainViewModelFactory(context.applicationContext as Application))
+
+        MainScreen(navController = rememberNavController(), viewModel = mViewModel)
     }
 }
