@@ -2,7 +2,6 @@ package com.example.notesappmvvm.screens
 
 import android.app.Application
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -40,8 +39,6 @@ fun MainScreen(navController: NavHostController) {
     val mViewModel: MainViewModel =
         viewModel(factory = MainViewModelFactory(context.applicationContext as Application))
 
-    val notes = mViewModel.readTest.observeAsState(listOf()).value
-
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(
@@ -59,9 +56,6 @@ fun MainScreen(navController: NavHostController) {
                 modifier = Modifier
                     .padding(PaddingValues(vertical = 8.dp, horizontal = 12.dp))
             ) {
-                items(notes) { note ->
-                    NoteItem(note = note, navController = navController)
-                }
             }
         }
     )
