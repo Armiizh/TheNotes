@@ -1,5 +1,6 @@
 package com.example.notesappmvvm
 
+import android.app.Application
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -15,7 +16,9 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.notesappmvvm.navigation.NotesNavHost
 import com.example.notesappmvvm.ui.theme.NotesAppMVVMTheme
 
@@ -26,6 +29,10 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             NotesAppMVVMTheme {
+                val context = LocalContext.current
+                val mViewModel: MainViewModel =
+                    viewModel(factory = MainViewModelFactory(context.applicationContext as Application))
+
                 Scaffold(
                     topBar = {
                         TopAppBar(
@@ -43,7 +50,7 @@ class MainActivity : ComponentActivity() {
                             modifier = Modifier.padding(paddingValues).fillMaxWidth(),
                             color = MaterialTheme.colorScheme.background
                         ) {
-                            NotesNavHost()
+                            NotesNavHost(mViewModel)
                         }
                     }
                 )
@@ -55,5 +62,9 @@ class MainActivity : ComponentActivity() {
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
-    NotesNavHost()
+    val context = LocalContext.current
+    val mViewModel: MainViewModel =
+        viewModel(factory = MainViewModelFactory(context.applicationContext as Application))
+
+    NotesNavHost(mViewModel)
 }
