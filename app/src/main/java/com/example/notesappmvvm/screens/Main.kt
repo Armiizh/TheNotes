@@ -52,7 +52,7 @@ fun MainScreen(navController: NavHostController, viewModel: MainViewModel) {
         content = { PaddingValues ->
             LazyColumn(
                 modifier = Modifier
-                    .padding(PaddingValues(vertical = 8.dp, horizontal = 12.dp))
+                    .padding(PaddingValues(vertical = 6.dp, horizontal = 12.dp))
             ) {
                 items(notes) { note ->
                     NoteItem(note = note, navController = navController)
@@ -72,7 +72,7 @@ fun NoteItem(
             .padding(PaddingValues(vertical = 12.dp, horizontal = 12.dp))
             .fillMaxWidth()
             .clickable {
-                navController.navigate(NavRoute.Note.route)
+                navController.navigate(NavRoute.Note.route + "/${note.id}")
             },
         elevation = CardDefaults.cardElevation(6.dp)
     ) {
