@@ -12,6 +12,7 @@ import com.example.notesappmvvm.utils.Constants.Keys.NOTE_DATABASE
 @Database(entities = [Note::class], version = 1)
 abstract class AppRoomDatabase: RoomDatabase() {
 
+
     abstract fun getRoomDao(): NoteRoomDao
 
     companion object {
@@ -25,7 +26,9 @@ abstract class AppRoomDatabase: RoomDatabase() {
                     context,
                     AppRoomDatabase::class.java,
                     NOTE_DATABASE
-                ).build()
+                )
+                    .addMigrations()
+                    .build()
                 INSTANCE as AppRoomDatabase
             } else INSTANCE as AppRoomDatabase
         }

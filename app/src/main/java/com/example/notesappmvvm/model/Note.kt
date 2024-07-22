@@ -3,10 +3,10 @@ package com.example.notesappmvvm.model
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.example.notesappmvvm.utils.Constants.Keys.NOTES_TABLE
+import com.example.notesappmvvm.utils.Constants.Keys.NOTES_APP_TABLE
 
 
-@Entity(tableName = NOTES_TABLE)
+@Entity(tableName = NOTES_APP_TABLE)
 data class Note(
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0,

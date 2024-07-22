@@ -10,6 +10,8 @@ class RoomRepository(private val noteRoomDao: NoteRoomDao) : DatabaseRepository 
     override val readAll: LiveData<List<Note>>
         get() = noteRoomDao.getAllNotes()
 
+    override fun signOut() {}
+
     override suspend fun create(note: Note, onSuccess: () -> Unit) {
         noteRoomDao.addNote(note = note)
         onSuccess()
