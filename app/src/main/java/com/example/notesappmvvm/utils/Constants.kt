@@ -5,8 +5,12 @@ import com.example.notesappmvvm.database.DatabaseRepository
 const val TYPE_DATABASE = "type_database"
 const val TYPE_ROOM = "type_room"
 const val TYPE_FIREBASE = "type_firebase"
+const val FIREBASE_ID = "firebaseId"
 
 lateinit var REPOSITORY: DatabaseRepository
+
+lateinit var LOGIN: String
+lateinit var PASSSWORD: String
 
 object Constants {
     object Keys {
@@ -14,8 +18,10 @@ object Constants {
         const val NOTE_TITLE = "Note title"
         const val NOTE_SUBTITLE = "Note subtitle"
         const val ADD_NOTE = "Add note"
-        const val TITLE = "Title"
-        const val SUBTITLE = "Subtitle"
+        const val TITLE = "title"
+        const val LOGIN_TEXT = "Login"
+        const val PASSWORD_TEXT = "Password"
+        const val SUBTITLE = "subtitle"
         const val NOTE_DATABASE = "notes_database"
         const val NOTES_TABLE = "notes_table"
         const val WHAT_WILL_WE_USE = "What will we use?"
@@ -27,8 +33,10 @@ object Constants {
         const val DELETE = "Delete"
         const val NAV_BACK = "Nav_back"
         const val EDIT_NOTE = "Edit note"
+        const val LOG_IN = "Log in"
         const val EMPTY = ""
         const val UPDATE_NOTE = "Update note"
+        const val SIGN_IN = "Sign in"
     }
 
     object Screens {
