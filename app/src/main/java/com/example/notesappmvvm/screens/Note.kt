@@ -42,6 +42,9 @@ import com.example.notesappmvvm.model.Note
 import com.example.notesappmvvm.navigation.NavRoute
 import com.example.notesappmvvm.ui.theme.NotesAppMVVMTheme
 import com.example.notesappmvvm.utils.Constants
+import com.example.notesappmvvm.utils.DB_TYPE
+import com.example.notesappmvvm.utils.TYPE_FIREBASE
+import com.example.notesappmvvm.utils.TYPE_ROOM
 import kotlinx.coroutines.launch
 
 
@@ -50,10 +53,11 @@ import kotlinx.coroutines.launch
 fun NoteScreen(navController: NavHostController, viewModel: MainViewModel, noteId: String?) {
 
     val notes = viewModel.readAllNotes().observeAsState(listOf()).value
-    val note = notes.firstOrNull { it.id == noteId?.toInt() } ?: Note(
-        title = Constants.Keys.NONE,
-        subtitle = Constants.Keys.NONE
-    )
+    val note = when (DB_TYPE) {
+        TYPE_ROOM -> { notes.firstOrNull { it.id == noteId?.toInt()} ?: Note() }
+        TYPE_FIREBASE -> { notes.firstOrNull { it.firebaseId == noteId } ?: Note() }
+        else -> Note()
+    }
 
     val bottomSheetState = rememberModalBottomSheetState()
     val coroutineScope = rememberCoroutineScope()
@@ -103,7 +107,8 @@ fun NoteScreen(navController: NavHostController, viewModel: MainViewModel, noteI
                                 note = Note(
                                     id = note.id,
                                     title = title,
-                                    subtitle = subtitle
+                                    subtitle = subtitle,
+                                    firebaseId = note.firebaseId
                                 )
                             ) {
                                 navController.navigate(NavRoute.Main.route)

@@ -11,7 +11,7 @@ import com.example.notesappmvvm.model.Note
 @Dao
 interface NoteRoomDao {
 
-    @Query("SELECT * FROM notes_table")
+    @Query("SELECT * FROM notesApp_table")
     fun getAllNotes(): LiveData<List<Note>>
 
     @Insert

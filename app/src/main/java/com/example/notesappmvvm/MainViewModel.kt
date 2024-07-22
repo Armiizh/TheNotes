@@ -11,6 +11,7 @@ import com.example.notesappmvvm.database.firebase.AppFirebaseRepository
 import com.example.notesappmvvm.database.room.AppRoomDatabase
 import com.example.notesappmvvm.database.room.repository.RoomRepository
 import com.example.notesappmvvm.model.Note
+import com.example.notesappmvvm.utils.Constants.Keys.NOTES_TABLE
 import com.example.notesappmvvm.utils.REPOSITORY
 import com.example.notesappmvvm.utils.TYPE_DATABASE
 import com.example.notesappmvvm.utils.TYPE_FIREBASE
@@ -21,6 +22,7 @@ import kotlinx.coroutines.launch
 class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     val context = application
+
 
     fun initDatabase(type: String, onSuccess: () -> Unit) {
         Log.d("checkData", "MainViewModel initDatabase with type: $type")
@@ -38,6 +40,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 )
             }
         }
+        context.deleteDatabase(NOTES_TABLE)
     }
 
     fun addNote(note: Note, onSuccess: () -> Unit) {

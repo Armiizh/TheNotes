@@ -41,6 +41,7 @@ import com.example.notesappmvvm.ui.theme.NotesAppMVVMTheme
 import com.example.notesappmvvm.utils.Constants
 import com.example.notesappmvvm.utils.Constants.Keys.FIREBASE_DATABASE
 import com.example.notesappmvvm.utils.Constants.Keys.ROOM_DATABASE
+import com.example.notesappmvvm.utils.DB_TYPE
 import com.example.notesappmvvm.utils.LOGIN
 import com.example.notesappmvvm.utils.PASSSWORD
 import com.example.notesappmvvm.utils.TYPE_FIREBASE
@@ -99,6 +100,7 @@ fun StartScreen(navController: NavHostController, viewModel: MainViewModel) {
                             LOGIN = login
                             PASSSWORD = password
                             viewModel.initDatabase(TYPE_FIREBASE) {
+                                DB_TYPE = TYPE_FIREBASE
                                 navController.navigate(NavRoute.Main.route)
                             }
                         },
@@ -125,6 +127,7 @@ fun StartScreen(navController: NavHostController, viewModel: MainViewModel) {
                 Button(
                     onClick = {
                         viewModel.initDatabase(TYPE_ROOM) {
+                            DB_TYPE = TYPE_ROOM
                             navController.navigate(route = NavRoute.Main.route)
                         }
 

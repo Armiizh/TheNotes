@@ -28,6 +28,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+
             NotesAppMVVMTheme {
                 val context = LocalContext.current
                 val mViewModel: MainViewModel =
