@@ -1,6 +1,5 @@
 package com.example.notesappmvvm.screens
 
-import android.app.Application
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -28,19 +27,13 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.example.notesappmvvm.MainViewModel
-import com.example.notesappmvvm.MainViewModelFactory
 import com.example.notesappmvvm.model.Note
 import com.example.notesappmvvm.navigation.NavRoute
-import com.example.notesappmvvm.ui.theme.NotesAppMVVMTheme
 import com.example.notesappmvvm.utils.Constants
 import com.example.notesappmvvm.utils.DB_TYPE
 import com.example.notesappmvvm.utils.TYPE_FIREBASE
@@ -54,8 +47,14 @@ fun NoteScreen(navController: NavHostController, viewModel: MainViewModel, noteI
 
     val notes = viewModel.readAllNotes().observeAsState(listOf()).value
     val note = when (DB_TYPE.value) {
-        TYPE_ROOM -> { notes.firstOrNull { it.id == noteId?.toInt()} ?: Note() }
-        TYPE_FIREBASE -> { notes.firstOrNull { it.firebaseId == noteId } ?: Note() }
+        TYPE_ROOM -> {
+            notes.firstOrNull { it.id == noteId?.toInt() } ?: Note()
+        }
+
+        TYPE_FIREBASE -> {
+            notes.firstOrNull { it.firebaseId == noteId } ?: Note()
+        }
+
         else -> Note()
     }
 
@@ -99,7 +98,7 @@ fun NoteScreen(navController: NavHostController, viewModel: MainViewModel, noteI
                         label = { Text(text = Constants.Keys.SUBTITLE) },
                         isError = subtitle.isEmpty()
                     )
-                    //Update btn in Sheet
+                    //Update  btn in Sheet
                     Button(
                         modifier = Modifier.padding(top = 16.dp),
                         onClick = {
@@ -213,22 +212,4 @@ fun NoteScreen(navController: NavHostController, viewModel: MainViewModel, noteI
             }
         }
     )
-
-
-}
-
-
-@Preview(showBackground = true)
-@Composable
-fun PrevNoteScreen() {
-    NotesAppMVVMTheme {
-        val context = LocalContext.current
-        val mViewModel: MainViewModel =
-            viewModel(factory = MainViewModelFactory(context.applicationContext as Application))
-        NoteScreen(
-            navController = rememberNavController(),
-            viewModel = mViewModel,
-            noteId = "1"
-        )
-    }
 }

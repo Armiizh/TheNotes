@@ -11,7 +11,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ExitToApp
+import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -43,8 +43,8 @@ class MainActivity : ComponentActivity() {
                 val context = LocalContext.current
                 val mViewModel: MainViewModel =
                     viewModel(factory = MainViewModelFactory(context.applicationContext as Application))
-
                 val navController = rememberNavController()
+
                 Scaffold(
                     topBar = {
                         TopAppBar(
@@ -58,7 +58,8 @@ class MainActivity : ComponentActivity() {
                                     Text(text = "Notes App")
                                     if (DB_TYPE.value.isNotEmpty()) {
                                         Icon(
-                                            imageVector = Icons.Default.ExitToApp,
+
+                                            imageVector = Icons.AutoMirrored.Filled.ExitToApp,
                                             contentDescription = "",
                                             modifier = Modifier.clickable {
                                                 mViewModel.signOut {
@@ -73,7 +74,7 @@ class MainActivity : ComponentActivity() {
                                     }
                                 }
                             },
-                            colors = TopAppBarDefaults.smallTopAppBarColors(
+                            colors = TopAppBarDefaults.topAppBarColors(
                                 containerColor = MaterialTheme.colorScheme.primaryContainer,
                                 titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer
                             )
