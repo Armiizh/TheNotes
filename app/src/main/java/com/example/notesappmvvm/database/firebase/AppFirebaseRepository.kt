@@ -15,37 +15,32 @@ import com.google.firebase.ktx.Firebase
 class AppFirebaseRepository : DatabaseRepository {
 
     private val mAuth = FirebaseAuth.getInstance()
-
+    private val database = Firebase.database.reference.child("users").child(mAuth.currentUser?.uid.toString()).child("notes")
     override val readAll: LiveData<List<Note>> = AllNotesLivaData()
-    private val database = Firebase.database.reference
-        .child(mAuth.currentUser?.uid.toString())
 
     override suspend fun create(note: Note, onSuccess: () -> Unit) {
+
         val noteId = database.push().key.toString()
         val mapNotes = hashMapOf<String, Any>()
-
         mapNotes[FIREBASE_ID] = noteId
         mapNotes[Constants.Keys.TITLE] = note.title
         mapNotes[Constants.Keys.SUBTITLE] = note.subtitle
-
         database.child(noteId)
             .updateChildren(mapNotes)
             .addOnSuccessListener { onSuccess() }
-            .addOnFailureListener { Log.d("checkData", "Failed to add new note") }
+            .addOnFailureListener { Log.d("checkData", "Не удалось залить заметку на Firebase") }
     }
 
     override suspend fun update(note: Note, onSuccess: () -> Unit) {
         val noteId = note.firebaseId
         val mapNotes = hashMapOf<String, Any>()
-
         mapNotes[FIREBASE_ID] = noteId
         mapNotes[Constants.Keys.TITLE] = note.title
         mapNotes[Constants.Keys.SUBTITLE] = note.subtitle
-
         database.child(noteId)
             .updateChildren(mapNotes)
             .addOnSuccessListener { onSuccess() }
-            .addOnFailureListener { Log.d("checkData", "Failed to update note") }
+            .addOnFailureListener { Log.d("checkData", "Не удалось залить заметку на Firebase") }
     }
 
     override suspend fun delete(note: Note, onSuccess: () -> Unit) {
@@ -55,17 +50,18 @@ class AppFirebaseRepository : DatabaseRepository {
     }
 
     override fun signOut() {
-        mAuth.signOut()
+
     }
 
     override fun connectToDatabase(onSuccess: () -> Unit, onFail: (Throwable) -> Unit) {
         mAuth.signInWithEmailAndPassword(LOGIN, PASSSWORD)
             .addOnSuccessListener { onSuccess() }
-            .addOnFailureListener { mAuth.createUserWithEmailAndPassword(LOGIN, PASSSWORD)
-                .addOnSuccessListener { onSuccess() }
-                .addOnFailureListener { expection ->
-                    onFail(expection)
-                }}
-
+            .addOnFailureListener {
+                mAuth.createUserWithEmailAndPassword(LOGIN, PASSSWORD)
+                    .addOnSuccessListener { onSuccess() }
+                    .addOnFailureListener { expection ->
+                        onFail(expection)
+                    }
+            }
     }
 }

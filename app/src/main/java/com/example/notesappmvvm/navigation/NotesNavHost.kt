@@ -6,21 +6,23 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.notesappmvvm.MainViewModel
 import com.example.notesappmvvm.screens.AddScreen
+import com.example.notesappmvvm.screens.LoginScreen
 import com.example.notesappmvvm.screens.MainScreen
 import com.example.notesappmvvm.screens.NoteScreen
 import com.example.notesappmvvm.screens.StartScreen
 import com.example.notesappmvvm.utils.Constants
 
 sealed class NavRoute(val route: String) {
+
     object Start : NavRoute(Constants.Screens.START_SCREEN)
     object Main : NavRoute(Constants.Screens.MAIN_SCREEN)
     object Add : NavRoute(Constants.Screens.ADD_SCREEN)
     object Note : NavRoute(Constants.Screens.NOTE_SCREEN)
+    object Login : NavRoute(Constants.Screens.LOGIN_SCREEN)
 }
 
 @Composable
 fun NotesNavHost(mViewModel: MainViewModel, navController: NavHostController) {
-
 
     NavHost(navController = navController, startDestination = NavRoute.Start.route) {
 
@@ -47,6 +49,12 @@ fun NotesNavHost(mViewModel: MainViewModel, navController: NavHostController) {
                 navController = navController,
                 viewModel = mViewModel,
                 noteId = backStackEntry.arguments?.getString(Constants.Keys.ID)
+            )
+        }
+        composable(NavRoute.Login.route) {
+            LoginScreen(
+                navController = navController,
+                viewModel = mViewModel
             )
         }
     }
