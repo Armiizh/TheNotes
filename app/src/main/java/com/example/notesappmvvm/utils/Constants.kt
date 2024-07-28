@@ -33,10 +33,14 @@ object Constants {
         const val DELETE = "Delete"
         const val NAV_BACK = "Nav_back"
         const val EDIT_NOTE = "Edit note"
-        const val LOG_IN = "Log in"
+        const val LOG_IN = "Log in or Sign up"
+        const val LOG_IN_GUEST = "Guest"
+        const val SHOW_PASSWORD = "Show password"
+        const val HIDE_PASSWORD = "Hide password"
         const val EMPTY = ""
         const val UPDATE_NOTE = "Update note"
-        const val SIGN_IN = "Sign in"
+        const val DONT_HAVE_ACC = "If you don't have an account yet, we will create one for you"
+        const val CONTINUE_AS_GUEST = "Or continue as"
     }
 
     object Screens {

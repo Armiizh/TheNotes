@@ -9,12 +9,10 @@ import com.example.notesappmvvm.screens.AddScreen
 import com.example.notesappmvvm.screens.LoginScreen
 import com.example.notesappmvvm.screens.MainScreen
 import com.example.notesappmvvm.screens.NoteScreen
-import com.example.notesappmvvm.screens.StartScreen
 import com.example.notesappmvvm.utils.Constants
 
 sealed class NavRoute(val route: String) {
 
-    object Start : NavRoute(Constants.Screens.START_SCREEN)
     object Main : NavRoute(Constants.Screens.MAIN_SCREEN)
     object Add : NavRoute(Constants.Screens.ADD_SCREEN)
     object Note : NavRoute(Constants.Screens.NOTE_SCREEN)
@@ -24,14 +22,8 @@ sealed class NavRoute(val route: String) {
 @Composable
 fun NotesNavHost(mViewModel: MainViewModel, navController: NavHostController) {
 
-    NavHost(navController = navController, startDestination = NavRoute.Start.route) {
+    NavHost(navController = navController, startDestination = NavRoute.Login.route) {
 
-        composable(NavRoute.Start.route) {
-            StartScreen(
-                navController = navController,
-                viewModel = mViewModel
-            )
-        }
         composable(NavRoute.Main.route) {
             MainScreen(
                 navController = navController,

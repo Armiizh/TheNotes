@@ -63,8 +63,8 @@ class MainActivity : ComponentActivity() {
                                             contentDescription = "",
                                             modifier = Modifier.clickable {
                                                 mViewModel.signOut {
-                                                    navController.navigate(NavRoute.Start.route) {
-                                                        popUpTo(NavRoute.Start.route) {
+                                                    navController.navigate(NavRoute.Login.route) {
+                                                        popUpTo(NavRoute.Login.route) {
                                                             inclusive = true
                                                         }
                                                     }
@@ -94,15 +94,4 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    val context = LocalContext.current
-    val mViewModel: MainViewModel =
-        viewModel(factory = MainViewModelFactory(context.applicationContext as Application))
-
-    val navController = rememberNavController()
-    NotesNavHost(mViewModel, navController)
 }
