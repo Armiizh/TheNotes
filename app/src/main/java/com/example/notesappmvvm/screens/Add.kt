@@ -23,6 +23,8 @@ import com.example.notesappmvvm.MainViewModel
 import com.example.notesappmvvm.model.Note
 import com.example.notesappmvvm.navigation.NavRoute
 import com.example.notesappmvvm.utils.Constants
+import java.text.SimpleDateFormat
+import java.util.Date
 
 @Composable
 fun AddScreen(navController: NavHostController, viewModel: MainViewModel) {
@@ -46,7 +48,6 @@ fun AddScreen(navController: NavHostController, viewModel: MainViewModel) {
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.padding(vertical = 8.dp)
                 )
-
                 OutlinedTextField(
                     value = title,
                     onValueChange = {
@@ -69,7 +70,14 @@ fun AddScreen(navController: NavHostController, viewModel: MainViewModel) {
                     modifier = Modifier.padding(top = 16.dp),
                     enabled = isButtonEnabled,
                     onClick = {
-                        viewModel.addNote(note = Note(title = title, subtitle = subtitle)) {
+                        val updatedAt = SimpleDateFormat("dd.MM.yy HH.mm").format(Date(System.currentTimeMillis()))
+                        viewModel.addNote(
+                            note = Note(
+                                title = title,
+                                subtitle = subtitle,
+                                updatedAt = updatedAt
+                            )
+                        ) {
                             navController.navigate(NavRoute.Main.route)
                         }
                     }

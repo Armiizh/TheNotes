@@ -61,6 +61,7 @@ import com.example.notesappmvvm.utils.PASSSWORD
 import com.example.notesappmvvm.utils.TYPE_FIREBASE
 import com.example.notesappmvvm.utils.TYPE_ROOM
 
+
 @Composable
 fun LoginScreen(navController: NavHostController, viewModel: MainViewModel) {
 

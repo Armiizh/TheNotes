@@ -39,6 +39,8 @@ import com.example.notesappmvvm.utils.DB_TYPE
 import com.example.notesappmvvm.utils.TYPE_FIREBASE
 import com.example.notesappmvvm.utils.TYPE_ROOM
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Date
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -102,17 +104,18 @@ fun NoteScreen(navController: NavHostController, viewModel: MainViewModel, noteI
                     Button(
                         modifier = Modifier.padding(top = 16.dp),
                         onClick = {
+                            val updatedAt = SimpleDateFormat("dd.MM.yy HH.mm").format(Date(System.currentTimeMillis()))
                             viewModel.updateNote(
                                 note = Note(
                                     id = note.id,
                                     title = title,
                                     subtitle = subtitle,
-                                    firebaseId = note.firebaseId
+                                    firebaseId = note.firebaseId,
+                                    updatedAt = updatedAt
                                 )
                             ) {
                                 navController.navigate(NavRoute.Main.route)
                             }
-
                         }
                     ) {
                         Text(text = Constants.Keys.UPDATE_NOTE)
