@@ -40,6 +40,8 @@ object Constants {
         const val UPDATE_NOTE = "Update note"
         const val DONT_HAVE_ACC = "If you don't have an account yet, we will create one for you"
         const val CONTINUE_AS_GUEST = "Or continue as"
+        const val INVALID_PASSWORD = "Invalid password"
+        const val INVALID_EMAIL = "Invalid email"
     }
 
     object Screens {

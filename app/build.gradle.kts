@@ -79,5 +79,4 @@ dependencies {
     implementation (libs.androidx.room.ktx)
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)
-
 }

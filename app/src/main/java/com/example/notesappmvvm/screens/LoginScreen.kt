@@ -7,6 +7,7 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -26,6 +27,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -198,10 +200,16 @@ private fun LoginTextField(
     uiColor: Color,
     onValueChange: (String) -> Unit
 ) {
+    val emailRegex = Regex("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")
+    var isValidEmail by remember { mutableStateOf(true) }
+
     TextField(
         modifier = Modifier.fillMaxWidth(),
         value = login,
-        onValueChange = onValueChange,
+        onValueChange = {
+            onValueChange(it)
+            isValidEmail = emailRegex.matches(it)
+        },
         label = {
             Text(
                 text = Constants.Keys.LOGIN_TEXT,
@@ -220,7 +228,19 @@ private fun LoginTextField(
             keyboardType = KeyboardType.Email,
             autoCorrect = false,
             imeAction = ImeAction.Next
-        )
+        ),
+        trailingIcon = {
+            if (!isValidEmail && login.isNotEmpty()) {
+                Text(
+                    text = Constants.Keys.INVALID_EMAIL,
+                    color = MaterialTheme.colorScheme.error,
+                    modifier = Modifier.padding(top = 10.dp, end = 8.dp),
+                    style = MaterialTheme.typography.bodySmall
+                )
+            } else {
+                null
+            }
+        }
     )
 }
 
@@ -231,6 +251,17 @@ private fun PasswordTextField(
     onValueChange: (String) -> Unit
 ) {
     var passwordVisible by remember { mutableStateOf(false) }
+    var isValidPassword = remember { mutableStateOf(false) }
+
+    LaunchedEffect(password) {
+        if (password.isNotEmpty()) {
+            isValidPassword.value = password.length >= 8 && password.contains(Regex("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).*$"))
+        } else {
+            isValidPassword.value = false
+        }
+    }
+
+
     TextField(
         modifier = Modifier.fillMaxWidth(),
         value = password,
@@ -249,13 +280,27 @@ private fun PasswordTextField(
             focusedContainerColor = MaterialTheme.colorScheme.textFieldContainer,
         ),
         trailingIcon = {
-            IconButton(onClick = { passwordVisible = !passwordVisible }) {
-                Icon(
-                    painter = if (passwordVisible) painterResource(R.drawable.ic_visibility) else painterResource(
-                        R.drawable.ic_visibility_off
-                    ),
-                    contentDescription = if (passwordVisible) Constants.Keys.HIDE_PASSWORD else Constants.Keys.SHOW_PASSWORD
-                )
+            Row(
+                verticalAlignment = Alignment.Bottom
+            ) {
+                if (!isValidPassword.value && password.isNotEmpty()) {
+                    Text(
+                        text = Constants.Keys.INVALID_PASSWORD,
+                        color = MaterialTheme.colorScheme.error,
+                        modifier = Modifier.padding(bottom = 12.dp, end = 8.dp),
+                        style = MaterialTheme.typography.bodySmall
+                    )
+                } else {
+                    null
+                }
+                IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                    Icon(
+                        painter = if (passwordVisible) painterResource(R.drawable.ic_visibility) else painterResource(
+                            R.drawable.ic_visibility_off
+                        ),
+                        contentDescription = if (passwordVisible) Constants.Keys.HIDE_PASSWORD else Constants.Keys.SHOW_PASSWORD
+                    )
+                }
             }
         },
         singleLine = true,
@@ -283,7 +328,7 @@ private fun TopSection(uiColor: Color) {
         )
 
         Column(
-            modifier = Modifier.padding(top = 80.dp),
+            modifier = Modifier.padding(top = 70.dp),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -295,7 +340,7 @@ private fun TopSection(uiColor: Color) {
                 ),
                 tint = uiColor
             )
-            Spacer(modifier = Modifier.height(15.dp))
+            Spacer(modifier = Modifier.height(10.dp))
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
