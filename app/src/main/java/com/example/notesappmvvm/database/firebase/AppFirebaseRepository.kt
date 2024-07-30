@@ -25,6 +25,7 @@ class AppFirebaseRepository : DatabaseRepository {
         mapNotes[FIREBASE_ID] = noteId
         mapNotes[Constants.Keys.TITLE] = note.title
         mapNotes[Constants.Keys.SUBTITLE] = note.subtitle
+        mapNotes[Constants.Keys.UPDATEDAT] = note.updatedAt
         database.child(noteId)
             .updateChildren(mapNotes)
             .addOnSuccessListener { onSuccess() }
@@ -37,6 +38,7 @@ class AppFirebaseRepository : DatabaseRepository {
         mapNotes[FIREBASE_ID] = noteId
         mapNotes[Constants.Keys.TITLE] = note.title
         mapNotes[Constants.Keys.SUBTITLE] = note.subtitle
+        mapNotes[Constants.Keys.UPDATEDAT] = note.updatedAt
         database.child(noteId)
             .updateChildren(mapNotes)
             .addOnSuccessListener { onSuccess() }

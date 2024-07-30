@@ -22,12 +22,11 @@ object Constants {
         const val LOGIN_TEXT = "Login"
         const val PASSWORD_TEXT = "Password"
         const val SUBTITLE = "subtitle"
+        const val UPDATEDAT = "updatedAt"
+        const val ADDTHENOTE = "Add The Note"
         const val NOTE_DATABASE = "notes_database"
         const val NOTES_APP_TABLE = "notesApp_table"
         const val NOTES_TABLE = "notes_table"
-        const val WHAT_WILL_WE_USE = "What will we use?"
-        const val ROOM_DATABASE = "Room database"
-        const val FIREBASE_DATABASE = "Firebase database"
         const val ID = "id"
         const val UPDATE = "Update"
         const val DELETE = "Delete"
@@ -41,10 +40,11 @@ object Constants {
         const val UPDATE_NOTE = "Update note"
         const val DONT_HAVE_ACC = "If you don't have an account yet, we will create one for you"
         const val CONTINUE_AS_GUEST = "Or continue as"
+        const val INVALID_PASSWORD = "Invalid password"
+        const val INVALID_EMAIL = "Invalid email"
     }
 
     object Screens {
-        const val START_SCREEN = "start_screen"
         const val MAIN_SCREEN = "main_screen"
         const val ADD_SCREEN = "add_screen"
         const val NOTE_SCREEN = "note_screen"
