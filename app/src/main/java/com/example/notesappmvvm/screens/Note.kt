@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package com.example.notesappmvvm.screens
 
 import androidx.compose.foundation.layout.Arrangement
@@ -14,6 +16,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SheetState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -38,6 +41,7 @@ import com.example.notesappmvvm.utils.Constants
 import com.example.notesappmvvm.utils.DB_TYPE
 import com.example.notesappmvvm.utils.TYPE_FIREBASE
 import com.example.notesappmvvm.utils.TYPE_ROOM
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -125,6 +129,30 @@ fun NoteScreen(navController: NavHostController, viewModel: MainViewModel, noteI
         }
     }
 
+    EditSection(
+        note,
+        showBottomSheet,
+        coroutineScope,
+        bottomSheetState,
+        title,
+        subtitle,
+        navController
+    )
+}
+
+@Composable
+private fun EditSection(
+    note: Note,
+    showBottomSheet: Boolean,
+    coroutineScope: CoroutineScope,
+    bottomSheetState: SheetState,
+    title: String,
+    subtitle: String,
+    navController: NavHostController
+) {
+    var showBottomSheet1 = showBottomSheet
+    var title1 = title
+    var subtitle1 = subtitle
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -175,30 +203,17 @@ fun NoteScreen(navController: NavHostController, viewModel: MainViewModel, noteI
                     //Update btn
                     Button(
                         onClick = {
-                            showBottomSheet = true
+                            showBottomSheet1 = true
                             coroutineScope.launch {
                                 bottomSheetState.show()
-                                title = note.title
-                                subtitle = note.subtitle
+                                title1 = note.title
+                                subtitle1 = note.subtitle
                             }
                         }
                     ) {
                         Text(text = Constants.Keys.UPDATE)
                     }
-
-
-                    //Delete btn
-                    Button(
-                        onClick = {
-                            viewModel.deleteNote(note = note) {
-                                navController.navigate(NavRoute.Main.route)
-                            }
-                        }
-                    ) {
-                        Text(text = Constants.Keys.DELETE)
-                    }
                 }
-
 
                 //Back to main btn
                 Button(

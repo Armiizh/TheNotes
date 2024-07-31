@@ -17,8 +17,7 @@ import com.example.notesappmvvm.utils.REPOSITORY
 import com.example.notesappmvvm.utils.TYPE_FIREBASE
 import com.example.notesappmvvm.utils.TYPE_ROOM
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
@@ -67,6 +66,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun deleteNote(note: Note, onSuccess: () -> Unit) {
         viewModelScope.launch(Dispatchers.IO) {
+            delay(400)
             REPOSITORY.delete(note = note) {
                 viewModelScope.launch(Dispatchers.Main) {
                     onSuccess()
