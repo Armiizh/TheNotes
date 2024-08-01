@@ -28,6 +28,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -73,7 +74,8 @@ fun MainScreen(navController: NavHostController, viewModel: MainViewModel) {
                                 start = 2.dp,
                                 end = 12.dp
                             ),
-                        horizontalArrangement = Arrangement.SpaceBetween
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(text = "Notes", style = MaterialTheme.typography.headlineLarge)
                         if (DB_TYPE.value.isNotEmpty()) {
@@ -157,7 +159,8 @@ fun NoteItem(
                 .padding(PaddingValues(vertical = 4.dp))
                 .fillMaxWidth()
                 .clickable {
-                    navController.navigate(NavRoute.Note.route + "/${noteId}")
+                    navController.navigate(NavRoute.Edit.route + "/${noteId}")
+                    Log.d("checkData", "From Main \n Title:${note.title} \nSubtitle:${note.subtitle}")
                 },
             elevation = CardDefaults.cardElevation(6.dp)
         ) {

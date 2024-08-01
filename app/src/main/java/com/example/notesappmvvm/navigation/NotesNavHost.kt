@@ -8,22 +8,21 @@ import com.example.notesappmvvm.MainViewModel
 import com.example.notesappmvvm.screens.AddScreen
 import com.example.notesappmvvm.screens.LoginScreen
 import com.example.notesappmvvm.screens.MainScreen
-import com.example.notesappmvvm.screens.NoteScreen
+import com.example.notesappmvvm.screens.EditScreen
 import com.example.notesappmvvm.utils.Constants
 
 sealed class NavRoute(val route: String) {
 
-    object Main : NavRoute(Constants.Screens.MAIN_SCREEN)
-    object Add : NavRoute(Constants.Screens.ADD_SCREEN)
-    object Note : NavRoute(Constants.Screens.NOTE_SCREEN)
-    object Login : NavRoute(Constants.Screens.LOGIN_SCREEN)
+    data object Main : NavRoute(Constants.Screens.MAIN_SCREEN)
+    data object Add : NavRoute(Constants.Screens.ADD_SCREEN)
+    data object Edit : NavRoute(Constants.Screens.EDIT_SCREEN)
+    data object Login : NavRoute(Constants.Screens.LOGIN_SCREEN)
 }
 
 @Composable
 fun NotesNavHost(mViewModel: MainViewModel, navController: NavHostController) {
 
     NavHost(navController = navController, startDestination = NavRoute.Login.route) {
-
         composable(NavRoute.Main.route) {
             MainScreen(
                 navController = navController,
@@ -36,8 +35,8 @@ fun NotesNavHost(mViewModel: MainViewModel, navController: NavHostController) {
                 viewModel = mViewModel
             )
         }
-        composable(NavRoute.Note.route + "/{${Constants.Keys.ID}}") { backStackEntry ->
-            NoteScreen(
+        composable(NavRoute.Edit.route + "/{${Constants.Keys.ID}}") { backStackEntry ->
+            EditScreen(
                 navController = navController,
                 viewModel = mViewModel,
                 noteId = backStackEntry.arguments?.getString(Constants.Keys.ID)
