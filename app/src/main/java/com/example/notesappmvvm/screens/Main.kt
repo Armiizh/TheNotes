@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -15,6 +16,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -24,10 +27,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -62,6 +69,9 @@ fun MainScreen(navController: NavHostController, viewModel: MainViewModel) {
     val context = LocalContext.current
     val mViewModel: MainViewModel =
         viewModel(factory = MainViewModelFactory(context.applicationContext as Application))
+    val openDialog = remember { mutableStateOf(false) }
+    val sortedNotes = notes.sortedByDescending { it.updatedAt }
+    val searchQuery = remember { mutableStateOf("") }
 
     Scaffold(
         topBar = {
@@ -81,15 +91,9 @@ fun MainScreen(navController: NavHostController, viewModel: MainViewModel) {
                         if (DB_TYPE.value.isNotEmpty()) {
                             Icon(
                                 imageVector = Icons.AutoMirrored.Filled.ExitToApp,
-                                contentDescription = "",
+                                contentDescription = "Exit",
                                 modifier = Modifier.clickable {
-                                    mViewModel.signOut {
-                                        navController.navigate(NavRoute.Login.route) {
-                                            popUpTo(NavRoute.Login.route) {
-                                                inclusive = true
-                                            }
-                                        }
-                                    }
+                                    openDialog.value = true
                                 }
                             )
                         }
@@ -116,20 +120,104 @@ fun MainScreen(navController: NavHostController, viewModel: MainViewModel) {
             Surface(
                 modifier = Modifier.padding(paddingValues)
             ) {
-                LazyColumn(
-                    modifier = Modifier
-                        .padding(
-                            vertical = 6.dp,
-                            horizontal = 12.dp
-                        )
-                ) {
-                    items(notes) { note ->
-                        NoteItem(note = note, navController = navController, viewModel)
+                Column {
+                    Card(
+                        modifier = Modifier
+                            .padding(top = 10.dp, bottom = 8.dp).padding(horizontal = 12.dp),
+                    ) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(
+                                modifier = Modifier
+                                    .padding(start = 4.dp, top = 4.dp, bottom = 4.dp),
+                                painter = painterResource(id = R.drawable.ic_search),
+                                contentDescription = "Search icon"
+                            )
+                            TextField(
+                                value = searchQuery.value,
+                                onValueChange = { searchQuery.value = it },
+                                label = {
+                                    Text(
+                                        text = "Search",
+                                        fontSize = 12.sp
+                                    )
+                                },
+                                modifier = Modifier
+                                    .align(Alignment.Top)
+                                    .height(24.dp)
+                                    .fillMaxWidth(),
+                                colors = TextFieldDefaults.textFieldColors(
+                                    focusedIndicatorColor = Color.Transparent,
+                                    unfocusedIndicatorColor = Color.Transparent,
+                                    disabledIndicatorColor = Color.Transparent,
+                                    errorIndicatorColor = Color.Transparent
+                                ),
+                                singleLine = true
+                            )
+                        }
+                    }
+                    // Фильтр список заметок по поисковому запросу
+                    val filteredNotes = sortedNotes.filter { note ->
+                        note.title.contains(searchQuery.value, ignoreCase = true) ||
+                                note.subtitle.contains(searchQuery.value, ignoreCase = true)
+                    }
+
+                    LazyColumn(
+                        modifier = Modifier
+                            .padding(
+                                vertical = 6.dp,
+                                horizontal = 12.dp
+                            )
+                    ) {
+                        items(filteredNotes) { note ->
+                            NoteItem(note = note, navController = navController, viewModel)
+                        }
                     }
                 }
+
             }
         }
     )
+    if (openDialog.value) {
+        AlertDialog(
+            onDismissRequest = { openDialog.value = false },
+            title = {
+                Text(
+                    text = "Exit account",
+                    style = MaterialTheme.typography.headlineMedium
+                )
+            },
+            text = {
+                Text(
+                    text = "Are you sure you want to exit your account?"
+                )
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        mViewModel.signOut {
+                            navController.navigate(NavRoute.Login.route) {
+                                popUpTo(NavRoute.Login.route) {
+                                    inclusive = true
+                                }
+                            }
+                        }
+                        openDialog.value = false
+                    }
+                ) {
+                    Text(text = "Exit")
+                }
+            },
+            dismissButton = {
+                Button(
+                    onClick = { openDialog.value = false }
+                ) {
+                    Text("Cancel")
+                }
+            }
+        )
+    }
 }
 
 @Composable
@@ -160,7 +248,10 @@ fun NoteItem(
                 .fillMaxWidth()
                 .clickable {
                     navController.navigate(NavRoute.Edit.route + "/${noteId}")
-                    Log.d("checkData", "From Main \n Title:${note.title} \nSubtitle:${note.subtitle}")
+                    Log.d(
+                        "checkData",
+                        "From Main \n Title:${note.title} \nSubtitle:${note.subtitle}"
+                    )
                 },
             elevation = CardDefaults.cardElevation(6.dp)
         ) {
