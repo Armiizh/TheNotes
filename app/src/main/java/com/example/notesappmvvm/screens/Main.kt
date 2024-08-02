@@ -2,8 +2,11 @@ package com.example.notesappmvvm.screens
 
 import android.app.Application
 import android.util.Log
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -13,6 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material.icons.filled.Add
@@ -27,11 +31,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -40,9 +43,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -121,48 +126,12 @@ fun MainScreen(navController: NavHostController, viewModel: MainViewModel) {
                 modifier = Modifier.padding(paddingValues)
             ) {
                 Column {
-                    Card(
-                        modifier = Modifier
-                            .padding(top = 10.dp, bottom = 8.dp).padding(horizontal = 12.dp),
-                    ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Icon(
-                                modifier = Modifier
-                                    .padding(start = 4.dp, top = 4.dp, bottom = 4.dp),
-                                painter = painterResource(id = R.drawable.ic_search),
-                                contentDescription = "Search icon"
-                            )
-                            TextField(
-                                value = searchQuery.value,
-                                onValueChange = { searchQuery.value = it },
-                                label = {
-                                    Text(
-                                        text = "Search",
-                                        fontSize = 12.sp
-                                    )
-                                },
-                                modifier = Modifier
-                                    .align(Alignment.Top)
-                                    .height(24.dp)
-                                    .fillMaxWidth(),
-                                colors = TextFieldDefaults.textFieldColors(
-                                    focusedIndicatorColor = Color.Transparent,
-                                    unfocusedIndicatorColor = Color.Transparent,
-                                    disabledIndicatorColor = Color.Transparent,
-                                    errorIndicatorColor = Color.Transparent
-                                ),
-                                singleLine = true
-                            )
-                        }
-                    }
+                    SearchBar(searchQuery)
                     // Фильтр список заметок по поисковому запросу
                     val filteredNotes = sortedNotes.filter { note ->
                         note.title.contains(searchQuery.value, ignoreCase = true) ||
                                 note.subtitle.contains(searchQuery.value, ignoreCase = true)
                     }
-
                     LazyColumn(
                         modifier = Modifier
                             .padding(
@@ -175,7 +144,6 @@ fun MainScreen(navController: NavHostController, viewModel: MainViewModel) {
                         }
                     }
                 }
-
             }
         }
     )
@@ -217,6 +185,54 @@ fun MainScreen(navController: NavHostController, viewModel: MainViewModel) {
                 }
             }
         )
+    }
+}
+
+@Composable
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
+private fun SearchBar(searchQuery: MutableState<String>) {
+    Card(
+        modifier = Modifier
+            .padding(top = 10.dp, bottom = 8.dp)
+            .padding(horizontal = 12.dp),
+
+    ) {
+        Row(modifier = Modifier.height(24.dp).background(Color.Transparent),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                modifier = Modifier
+                    .padding(start = 8.dp, top = 4.dp, bottom = 4.dp),
+                painter = painterResource(id = R.drawable.ic_search),
+                contentDescription = "Search icon",
+                tint = Color.Gray
+            )
+            BasicTextField(
+                value = searchQuery.value,
+                onValueChange = { searchQuery.value = it },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 8.dp),
+                textStyle = TextStyle(fontSize = 12.sp,
+                    color = Color.White.copy(alpha = 0.5f)),
+                singleLine = true,
+                decorationBox = { innerTextField ->
+                    Box(modifier = Modifier.fillMaxWidth()) {
+                        innerTextField()
+                        if (searchQuery.value.isEmpty()) {
+                            Text(
+                                text = "Search...",
+                                color = Color.Gray,
+                                fontSize = 12.sp,
+                                modifier = Modifier
+                                    .align(Alignment.CenterStart)
+                            )
+                        }
+                    }
+                },
+                cursorBrush = SolidColor(Color.Gray)
+            )
+        }
     }
 }
 
