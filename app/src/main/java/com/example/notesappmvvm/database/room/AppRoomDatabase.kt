@@ -12,7 +12,6 @@ import com.example.notesappmvvm.utils.Constants.Keys.NOTE_DATABASE
 @Database(entities = [Note::class], version = 1)
 abstract class AppRoomDatabase: RoomDatabase() {
 
-
     abstract fun getRoomDao(): NoteRoomDao
 
     companion object {

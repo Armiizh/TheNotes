@@ -251,7 +251,7 @@ private fun PasswordTextField(
     onValueChange: (String) -> Unit
 ) {
     var passwordVisible by remember { mutableStateOf(false) }
-    var isValidPassword = remember { mutableStateOf(false) }
+    val isValidPassword = remember { mutableStateOf(false) }
 
     LaunchedEffect(password) {
         if (password.isNotEmpty()) {
