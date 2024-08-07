@@ -19,5 +19,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "NotesAppMVVM"
+rootProject.name = "TheNotes"
 include(":app")

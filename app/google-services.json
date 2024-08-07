@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "88631686994",
-    "project_id": "notesapp-9999c",
-    "storage_bucket": "notesapp-9999c.appspot.com"
+    "project_number": "228063573173",
+    "project_id": "thenotes-f7bd4",
+    "storage_bucket": "thenotes-f7bd4.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:88631686994:android:eb3a7338ae973442ebac8b",
+        "mobilesdk_app_id": "1:228063573173:android:90025113a026fb49523afc",
         "android_client_info": {
-          "package_name": "com.example.notesappmvvm"
+          "package_name": "com.example.TheNotes"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyALIJekjszzV-Cn4uXKebpbZ3RmvaDOU6Q"
+          "current_key": "AIzaSyDDAKCaDnhCkqRFwXxgMpSs75M2ARcs52g"
         }
       ],
       "services": {

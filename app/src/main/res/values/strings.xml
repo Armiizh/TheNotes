@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">NotesAppMVVM</string>
+    <string name="app_name">TheNotes</string>
     <string name="app_logo">App Logo</string>
     <string name="theNotes">The Notes</string>
     <string name="write_what_u_think">Write what you think</string>
