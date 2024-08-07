@@ -21,11 +21,14 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
@@ -45,6 +48,11 @@ fun AddScreen(navController: NavHostController, viewModel: MainViewModel) {
 
     var title by remember { mutableStateOf("") }
     var subtitle by remember { mutableStateOf("") }
+    val focusRequester = remember { FocusRequester() }
+
+    LaunchedEffect(Unit) {
+        focusRequester.requestFocus()
+    }
 
     Scaffold(
         topBar = {
@@ -106,7 +114,8 @@ fun AddScreen(navController: NavHostController, viewModel: MainViewModel) {
                     TextField(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .border(BorderStroke(0.dp, Color.Transparent)),
+                            .border(BorderStroke(0.dp, Color.Transparent))
+                            .focusRequester(focusRequester),
                         value = title,
                         onValueChange = {
                             title = it
@@ -149,3 +158,9 @@ fun AddScreen(navController: NavHostController, viewModel: MainViewModel) {
         }
     )
 }
+
+// Ввод заголовка заметки
+
+
+// Ввод текста заметка
+

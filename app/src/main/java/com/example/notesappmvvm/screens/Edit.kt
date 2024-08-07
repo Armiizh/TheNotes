@@ -23,16 +23,21 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.notesappmvvm.MainViewModel
@@ -45,7 +50,6 @@ import com.example.notesappmvvm.utils.TYPE_FIREBASE
 import com.example.notesappmvvm.utils.TYPE_ROOM
 import java.text.SimpleDateFormat
 import java.util.Date
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -63,11 +67,17 @@ fun EditScreen(navController: NavHostController, viewModel: MainViewModel, noteI
 
         else -> Note()
     }
-    var title by remember { mutableStateOf(Constants.Keys.EMPTY) }
-    var subtitle by remember { mutableStateOf(Constants.Keys.EMPTY) }
+    var title by remember { mutableStateOf(TextFieldValue(Constants.Keys.EMPTY)) }
+    var subtitle by remember { mutableStateOf(TextFieldValue(Constants.Keys.EMPTY)) }
 
-    title = note.title
-    subtitle = note.subtitle
+    val focusRequester = remember { FocusRequester() }
+
+    title = TextFieldValue(note.title)
+    subtitle = TextFieldValue(note.subtitle)
+
+    LaunchedEffect(Unit) {
+        focusRequester.requestFocus()
+    }
 
     Scaffold(
         topBar = {
@@ -95,14 +105,14 @@ fun EditScreen(navController: NavHostController, viewModel: MainViewModel, noteI
                         Text(
                             text = "Done",
                             modifier = Modifier.clickable {
-                                if (title.isNotEmpty() || (title.isNotEmpty() && subtitle.isNotEmpty())) {
+                                if (title.text.isNotEmpty() || (title.text.isNotEmpty() && subtitle.text.isNotEmpty())) {
                                     val updatedAt =
                                         SimpleDateFormat("dd.MM.yy HH.mm").format(Date(System.currentTimeMillis()))
                                     viewModel.updateNote(
                                         note = Note(
                                             id = note.id,
-                                            title = title,
-                                            subtitle = subtitle,
+                                            title = title.text,
+                                            subtitle = subtitle.text,
                                             firebaseId = note.firebaseId,
                                             updatedAt = updatedAt
                                         )
@@ -131,10 +141,11 @@ fun EditScreen(navController: NavHostController, viewModel: MainViewModel, noteI
                     TextField(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .border(BorderStroke(0.dp, Color.Transparent)),
-                        value = title,
+                            .border(BorderStroke(0.dp, Color.Transparent))
+                            .focusRequester(focusRequester),
+                        value = title.copy(selection = TextRange(title.text.length)),
                         onValueChange = {
-                            title = it
+                            title = it.copy(selection = TextRange(it.text.length))
                         },
                         textStyle = MaterialTheme.typography.headlineMedium,
                         colors = TextFieldDefaults.textFieldColors(
@@ -155,7 +166,7 @@ fun EditScreen(navController: NavHostController, viewModel: MainViewModel, noteI
                             .border(BorderStroke(0.dp, Color.Transparent)),
                         value = subtitle,
                         onValueChange = {
-                            subtitle = it
+                            subtitle = it.copy(selection = TextRange(it.text.length))
                         },
                         colors = TextFieldDefaults.textFieldColors(
                             containerColor = Color.Transparent,

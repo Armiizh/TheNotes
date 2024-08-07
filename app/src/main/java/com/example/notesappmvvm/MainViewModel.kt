@@ -22,7 +22,7 @@ import kotlinx.coroutines.launch
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
 
-    val context = application
+    private val context = application
 
     fun initDatabase(type: String, onSuccess: () -> Unit) {
         Log.d("checkData", "MainViewModel initDatabase with type: $type")
@@ -37,7 +37,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 REPOSITORY = AppFirebaseRepository()
                 REPOSITORY.connectToDatabase(
                     { onSuccess() },
-                    { Log.d("checkData", "Error: ${it}") }
+                    { Log.d("checkData", "Error: $it") }
                 )
             }
         }

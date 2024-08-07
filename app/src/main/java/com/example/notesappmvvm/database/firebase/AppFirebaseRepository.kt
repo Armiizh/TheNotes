@@ -15,7 +15,9 @@ import com.google.firebase.ktx.Firebase
 class AppFirebaseRepository : DatabaseRepository {
 
     private val mAuth = FirebaseAuth.getInstance()
-    private val database = Firebase.database.reference.child("users").child(mAuth.currentUser?.uid.toString()).child("notes")
+    private val database =
+        Firebase.database.reference.child("users").child(mAuth.currentUser?.uid.toString())
+            .child("notes")
     override val readAll: LiveData<List<Note>> = AllNotesLivaData()
 
     override suspend fun create(note: Note, onSuccess: () -> Unit) {
@@ -29,7 +31,6 @@ class AppFirebaseRepository : DatabaseRepository {
         database.child(noteId)
             .updateChildren(mapNotes)
             .addOnSuccessListener { onSuccess() }
-            .addOnFailureListener { Log.d("checkData", "Не удалось залить заметку на Firebase") }
     }
 
     override suspend fun update(note: Note, onSuccess: () -> Unit) {
@@ -42,7 +43,6 @@ class AppFirebaseRepository : DatabaseRepository {
         database.child(noteId)
             .updateChildren(mapNotes)
             .addOnSuccessListener { onSuccess() }
-            .addOnFailureListener { Log.d("checkData", "Не удалось залить заметку на Firebase") }
     }
 
     override suspend fun delete(note: Note, onSuccess: () -> Unit) {
