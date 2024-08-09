@@ -1,5 +1,5 @@
 # TheNotes
-<p align="center"> <img alt="App logo" src="logo.png" width="500"> </p>
+<p align="center"> <img alt="ManyScreens" src="ManyScreens.png"> </p>
 
 
 <p align="center">
