@@ -1,5 +1,5 @@
 # TheNotes
-![App logo](logo.png width="400" height="400") 
+<p align="center"> <img alt="App logo" src="logo.png" width="500"> </p>
 
 
 <p align="center">
