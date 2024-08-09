@@ -1,5 +1,5 @@
 # TheNotes
-<p align="center"> <img alt="ManyScreens" src="ManyScreens.png"> </p>
+
 
 
 <p align="center">
